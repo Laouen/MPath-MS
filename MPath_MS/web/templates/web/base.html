@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html >
+<head>	
+  <meta charset="utf-8">
+  <title>MPath-MS</title>
+  <meta content="MPtah-MS" property="og:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+
+  <!-- JQuery -->
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+  <!-- Materialize -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static "css/base.css" %}" >
+  <link rel="stylesheet" href="{% static "css/materialize-custom.css" %}" >
+
+  <!-- Materialize scripts -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.sidenav').sidenav();
+    });
+  </script>
+
+</head>
+<body class="body">
+  {% block body %}
+  {% endblock %}
+</body>
+</html>

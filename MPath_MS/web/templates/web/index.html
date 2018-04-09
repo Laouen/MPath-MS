@@ -1,0 +1,27 @@
+{% extends "web/base.html" %}
+
+{% block body %}
+<div class="navbar-fixed">
+	<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Logo</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a class="waves-effect waves-light" href=""><i class="material-icons left">view_list</i>MODELS LIST</a></li>
+        <li><a class="waves-effect waves-light" href=""><i class="material-icons left">cloud_upload</i>NEW MODEL</a></li>
+        <li><a class="waves-effect waves-light" href=""><i class="material-icons left">folder</i>SBML files</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<ul class="sidenav" id="mobile-demo">
+  <li><a href=""><i class="material-icons left">view_list</i>MODELS LIST</a></li>
+  <li><a href=""><i class="material-icons left">cloud_upload</i>NEW MODEL</a></li>
+  <li><a href=""><i class="material-icons left">folder</i>SBML files</a></li>
+</ul>
+
+<div>
+	HOLA
+</div>
+{% endblock %}
