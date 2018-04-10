@@ -1,4 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
+from django.http import JsonResponse
+
+import os
 
 from .forms import SBMLFileForm
 from .models import SBMLfile
@@ -17,10 +20,19 @@ def upload_sbml_form(request):
         if form.is_valid():
             print('save file')
             form.save()
-            return HttpResponseRedirect('/sbml_list')
+            return HttpResponseRedirect('/sbml_files')
         else:
             print('invalid form')
 
+def remove_sbml_file(request):
+    sbml_file = SBMLfile.objects.get(id=request.POST['sbml_file_id'])
+    os.remove(sbml_file.sbml_model.path)
+    sbml_file.delete()
+    return JsonResponse({
+        'sbml_file_id': request.POST['sbml_file_id'],
+        'removed': True
+    })
+
 def sbml_files(request):
-    sbml_files = [f.sbml_model for f in SBMLfile.objects.all()]
+    sbml_files = [{'id': f.id, 'name': f.filename(), 'url': f.sbml_model.url} for f in SBMLfile.objects.all()]
     return render(request, 'web/sbml_files.html', {'sbml_files': sbml_files})
