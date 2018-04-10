@@ -1,1 +1,4 @@
 env/
+MPath_MS/sbml_models/
+web/migrations/
+*.pyc
