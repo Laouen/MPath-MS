@@ -1,3 +1,4 @@
 from django.db import models
 
-# Create your models here.
+class SBMLfile(models.Model):
+    sbml_model = models.FileField(upload_to='sbml_models/')

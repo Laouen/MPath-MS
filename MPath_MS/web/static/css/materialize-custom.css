@@ -1,3 +1,34 @@
 nav {
 	background-color: #252525;
 }
+
+.standar-width {
+	width: 80% !important;
+	max-width: 600px !important;
+}
+
+.upload_form {
+	padding-top: 30px;
+	margin: auto !important;
+}
+
+.collection {
+	margin: 30px auto;
+}
+
+.secondary-content {
+	margin-right: 10px;
+}
+
+.brand-logo {
+	left: 10px !important;
+}
+
+h1 {
+	width: 70% !important;
+	
+	padding-top: 30px;
+	margin: auto !important;
+	
+	text-align: center;
+}

@@ -1,0 +1,27 @@
+{% extends "web/base.html" %}
+
+{% block body %}
+<div>
+
+  <ul class="collection with-header standar-width">
+    <li class="collection-header"><h4>SBML files</h4></li>
+    {% for file in sbml_files %}
+      <li class="collection-item">
+        <div>
+          {{file.name}}
+          <a href="#!" class="secondary-content red-text">
+            <i class="material-icons">delete_forever</i>
+          </a>
+          <a href="#!" class="secondary-content">
+            <i class="material-icons">cloud_download</i>
+          </a>
+          <a href="#!" class="secondary-content">
+            <i class="material-icons">insert_chart</i>
+          </a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+  
+</div>
+{% endblock %}
