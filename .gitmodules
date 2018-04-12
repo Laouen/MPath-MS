@@ -1,0 +1,3 @@
+[submodule "MPath_MS/PMGBP-PDEVS"]
+	path = MPath_MS/PMGBP-PDEVS
+	url = git@github.com:Laouen/PMGBP-PDEVS.git
