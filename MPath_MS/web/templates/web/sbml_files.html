@@ -12,12 +12,18 @@
           <a href="#" class="secondary-content red-text" onclick='javascript:remove_sbml_file("{{file.id}}")'>
             <i class="material-icons">delete_forever</i>
           </a>
-          <a href="{{file.url}}" class="secondary-content">
+          <a href="/static/sbml_files/{{file.name}}" class="secondary-content" download>
             <i class="material-icons">cloud_download</i>
           </a>
-          <a href="#" class="secondary-content" onclick='javascript:generate_model("{{file.id}}")'>
-            <i class="material-icons">insert_chart</i>
+          {% if file.model_generated %}
+          <a href="#" class="secondary-content">
+            <i id="generate-icon" class="material-icons">check</i>
           </a>
+          {% else %}
+          <a href="#" class="secondary-content black-text" onclick='javascript:generate_model("{{file.id}}")'>
+            <i id="generate-icon" class="material-icons">cached</i>
+          </a>
+          {% endif %}
         </div>
       </li>
     {% endfor %}

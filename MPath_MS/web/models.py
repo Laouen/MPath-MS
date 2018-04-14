@@ -4,7 +4,8 @@ from django.core.files.storage import FileSystemStorage
 import os
 
 class SBMLfile(models.Model):
-    sbml_model = models.FileField(upload_to='sbml_models/')
+    file = models.FileField(upload_to='sbml_files/')
+    model_generated = models.BooleanField(default=False)
 
     def filename(self):
-        return os.path.basename(self.sbml_model.name)
+        return os.path.basename(self.file.name)

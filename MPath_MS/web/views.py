@@ -28,7 +28,7 @@ def upload_sbml_form(request):
 
 def remove_sbml_file(request):
     sbml_file = SBMLfile.objects.get(id=request.POST['sbml_file_id'])
-    os.remove(sbml_file.sbml_model.path)
+    os.remove(sbml_file.file.path)
     sbml_file.delete()
     return JsonResponse({
         'sbml_file_id': request.POST['sbml_file_id'],
@@ -36,15 +36,18 @@ def remove_sbml_file(request):
     })
 
 def sbml_files(request):
-    sbml_files = [{'id': f.id, 'name': f.filename(), 'url': f.sbml_model.url} for f in SBMLfile.objects.all()]
+    sbml_files = [{'id': f.id, 'name': f.filename(), 'model_generated': f.model_generated} for f in SBMLfile.objects.all()]
     return render(request, 'web/sbml_files.html', {'sbml_files': sbml_files})
 
 def generate_model(request):
     sbml_file = SBMLfile.objects.get(id=request.POST['sbml_file_id'])
 
-    model_generator = ModelGenerator(sbml_file.sbml_model.path, 'e', 'p', 'c', json_model=None, groups_size=150)
+    model_generator = ModelGenerator(sbml_file.file.path, 'e', 'p', 'c', model_dir='./PMGBP', json_model=None, groups_size=150)
     model_generator.generate_top()
     model_generator.end_model()
+
+    sbml_file.model_generated = True
+    sbml_file.save()
     
     return JsonResponse({
         'sbml_file_id': request.POST['sbml_file_id'],
