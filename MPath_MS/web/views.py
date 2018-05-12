@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
+import subprocess
 
 import os
 
@@ -28,7 +29,10 @@ def upload_sbml_form(request):
 
 def remove_sbml_file(request):
     sbml_file = SBMLfile.objects.get(id=request.POST['sbml_file_id'])
-    os.remove(sbml_file.file.path)
+    try:
+        os.remove(sbml_file.file.path)
+    except:
+        pass
     sbml_file.delete()
     return JsonResponse({
         'sbml_file_id': request.POST['sbml_file_id'],
@@ -46,10 +50,17 @@ def generate_model(request):
     model_generator.generate_top()
     model_generator.end_model()
 
+
+    # compile model
+    model_name = sbml_file.filename().replace('.xml', '')
+    completed_process = subprocess.run(["sh", "./compile_model.sh", model_name])
+    #completed_process = subprocess.run(["make", "-C ./PMGBP"])
+    
+
     sbml_file.model_generated = True
     sbml_file.save()
-    
     return JsonResponse({
         'sbml_file_id': request.POST['sbml_file_id'],
         'generated': True
+        #'compiled': completed_process.returncode
     })
