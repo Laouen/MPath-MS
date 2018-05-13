@@ -5,7 +5,7 @@ import subprocess
 import os
 
 from .forms import SBMLFileForm
-from .models import SBMLfile
+from .models import *
 
 from PMGBP.ModelGenerator import ModelGenerator
 
@@ -46,16 +46,27 @@ def sbml_files(request):
 def generate_model(request):
     sbml_file = SBMLfile.objects.get(id=request.POST['sbml_file_id'])
 
-    model_generator = ModelGenerator(sbml_file.file.path, 'e', 'p', 'c', model_dir='./PMGBP', json_model=None, groups_size=150)
+    model_name = sbml_file.filename().replace('.xml', '')
+
+    model_generator = ModelGenerator(sbml_file.file.path,
+                                     'e',
+                                     'p',
+                                     'c',
+                                     model_dir='./PMGBP',
+                                     parameters_path='../model_parameters/' + model_name + '.xml',
+                                     json_model=None,
+                                     groups_size=150)
     model_generator.generate_top()
     model_generator.end_model()
 
 
     # compile model
-    model_name = sbml_file.filename().replace('.xml', '')
     completed_process = subprocess.run(["sh", "./compile_model.sh", model_name])
-    #completed_process = subprocess.run(["make", "-C ./PMGBP"])
-    
+
+    pmgbp_model = PMGBPModel(sbml_file=sbml_file)
+    pmgbp_model.model.name = 'compiled_models/' + model_name
+    pmgbp_model.parameters.name = 'model_parameters/' + model_name + '.xml'
+    pmgbp_model.save()
 
     sbml_file.model_generated = True
     sbml_file.save()
