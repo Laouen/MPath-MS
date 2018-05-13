@@ -5,21 +5,29 @@ import os
 
 class SBMLfile(models.Model):
     file = models.FileField(upload_to='sbml_files/')
-    model_generated = models.BooleanField(default=False)
+    model = models.ForeignKey('PMGBPModel', on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.filename().replace('.xml', '') + ' - ' + 'model ready: ' + str(self.model_generated)
+        return self.filename().replace('.xml', '')
 
     def filename(self):
         return os.path.basename(self.file.name)
+
+    def model_ready(self):
+        return not self.model is None
 
 class PMGBPModel(models.Model):
     model = models.FileField(upload_to='compiled_models/')
     parameters = models.FileField(upload_to='model_parameters/')
-    sbml_file = models.ForeignKey('SBMLfile', on_delete=models.DO_NOTHING)
+
+    def delete(self):
+        for sbml_file in SBMLfile.objects.filter(model=self):
+            sbml_file.model = None
+            sbml_file.save()
+        models.Model.delete(self)
 
     def __str__(self):
-        return self.sbml_file.filename().replace('.xml', '')
+        return self.name()
 
-    def filename(self):
-        return os.path.basename(self.file.name)
+    def name(self):
+        return os.path.basename(self.model.path)

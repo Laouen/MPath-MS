@@ -8,4 +8,6 @@ urlpatterns = [
     path('sbml_files', views.sbml_files, name='sbml_files'),
     path('remove_sbml_file', views.remove_sbml_file, name='remove_sbml_file'),
     path('generate_model', views.generate_model, name='generate_model'),
+    path('model_files', views.model_files, name='model_files'),
+    path('remove_model', views.remove_model, name='remove_model'),
 ]
