@@ -5,7 +5,7 @@ import os
 
 class SBMLfile(models.Model):
     file = models.FileField(upload_to='sbml_files/')
-    model = models.ForeignKey('PMGBPModel', on_delete=models.DO_NOTHING, null=True, blank=True)
+    model = models.ForeignKey('PMGBPModel', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.filename().replace('.xml', '')
@@ -31,3 +31,10 @@ class PMGBPModel(models.Model):
 
     def name(self):
         return os.path.basename(self.model.path)
+
+class Simulation(models.Model):
+    model = models.ForeignKey('PMGBPModel', on_delete=models.DO_NOTHING)
+    pid = models.IntegerField(null=True, blank=True)
+
+    def collection(self):
+        return '_'.join([self.model.name(), self.model.id, self.id])

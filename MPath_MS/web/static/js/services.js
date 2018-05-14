@@ -58,4 +58,6 @@ function remove_model_success(model_id, response) {
 	}
 }
 
-function run_model_simulation(model_id) {}
+function update_simulation_results(model_id) {
+	console.log('request');
+}

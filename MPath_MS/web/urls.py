@@ -10,4 +10,5 @@ urlpatterns = [
     path('generate_model', views.generate_model, name='generate_model'),
     path('model_files', views.model_files, name='model_files'),
     path('remove_model', views.remove_model, name='remove_model'),
+    path('simulation', views.run_simulation, name='run_simulation'),
 ]

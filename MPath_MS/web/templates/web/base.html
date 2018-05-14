@@ -24,6 +24,13 @@
 
   <script src="{% static "js/services.js" %}"></script>
 
+  <!-- graphics -->
+  <script src="{% static "js/highcharts.js" %}"></script>
+  <script src="{% static "js/highcharts-more.js" %}"></script>
+  <script src="{% static "js/export-csv.js" %}"></script>
+  <script src="{% static "js/exporting.js" %}"></script>
+  <script src="{% static "js/graphic.js" %}"></script>
+
   <!-- Materialize scripts -->
   <script type="text/javascript">
     $(document).ready(function(){
@@ -34,6 +41,9 @@
   <script type="text/javascript">
     var csrf_token = '{{ csrf_token }}';
   </script>
+
+  {% block script %}
+  {% endblock %}
 
 </head>
 <body class="body">
