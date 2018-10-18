@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'PMGMP',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,13 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
+# https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# TODO(Lao): Correctly set static
 STATIC_URL = '/static/'
+STATIC_ROOT= os.path.join(PROJECT_DIR, 'static/')
+
+MEDIA_URL='/media/'
+MEDIA_ROOT= os.path.join(PROJECT_DIR, 'media/')

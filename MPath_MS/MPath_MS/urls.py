@@ -16,7 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+# To serve media files in development
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('', include('web.urls')),
+    path('PMGMP/', include('PMGMP.urls')),
     path('admin/', admin.site.urls),
 ]
+
+# To serve media files in debug == development
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
