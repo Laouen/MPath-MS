@@ -127,3 +127,9 @@ STATIC_ROOT= os.path.join(PROJECT_DIR, 'static/')
 
 MEDIA_URL='/media/'
 MEDIA_ROOT= os.path.join(PROJECT_DIR, 'media/')
+
+#Celery Config
+BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

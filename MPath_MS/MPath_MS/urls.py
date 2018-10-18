@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('web.urls')),
     path('PMGMP/', include('PMGMP.urls')),
+    path('Sim_RT_Runner/', include('Sim_RT_Runner.urls')),
     path('admin/', admin.site.urls),
 ]
 
