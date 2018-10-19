@@ -8,10 +8,13 @@ class PMGBPModel(models.Model):
     parameters = models.FileField(upload_to='model_parameters/')
 
     def __str__(self):
-        return self.name()
+        return str(self.id) + " - " + self.name()
 
     def name(self):
         return os.path.basename(self.model.path)
+
+    def model_name(self):
+        return self.model.name.replace('compiled_models/', '')
 
 class SBMLfile(models.Model):
     file = models.FileField(upload_to='sbml_files/')
