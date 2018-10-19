@@ -72,9 +72,6 @@ def generate_and_compile_model(request, sbml_file_id):
                                      'p',
                                      'c',
                                      model_dir='./PMGBP',
-                                     # The parameters_path is the final relative path where the parameters will be consumed in runtime.
-                                     # This path is relative to the final folder where the model is executed. 
-                                     parameters_path='./model_parameters/' + model_name + '.xml',
                                      json_model=None,
                                      groups_size=150)
     model_generator.generate_top()
