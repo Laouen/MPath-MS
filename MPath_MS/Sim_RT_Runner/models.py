@@ -3,6 +3,7 @@ from PMGMP.models import *
 # Create your models here.
 
 class Simulation(models.Model):
+    running = models.BooleanField();
     start_datetime = models.DateTimeField(auto_now_add=True)
     end_datetime = models.DateTimeField(null=True, blank=True)
     pid = models.IntegerField(null=True, blank=True)
