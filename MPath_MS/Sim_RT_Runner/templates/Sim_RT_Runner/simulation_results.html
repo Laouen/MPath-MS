@@ -2,11 +2,16 @@
 
 {% block body %}
 <div>
-  <div>
-    Simulation id: {{simulation.id}}
-    <a href="/Sim_RT_Runner/stop_simulation/{{simulation.id}}/" class="secondary-content red-text">
-      <i class="material-icons">stop</i>
-    </a>
+  <div class="simulation standar-width">
+    <div class="simulation-title">
+        <div><span>Model name:</span> {{simulation.model.name}}</div>
+        <div><span>Simulation id:</span> {{simulation.id}}</div>
+        <div><span>Started time:</span> {{simulation.start_datetime}}</div>
+        <a href="/Sim_RT_Runner/stop_simulation/{{simulation.id}}/" class="secondary-content red-text">
+          <i class="material-icons">stop</i>
+        </a>
+    </div>
+    <div id="plot"></div>
   </div>
 </div>
 {% endblock %}

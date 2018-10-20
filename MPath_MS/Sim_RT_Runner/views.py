@@ -21,6 +21,8 @@ def serialize_simulation(simulation):
 		'id': simulation.id,
 		'pid': simulation.pid,
 		'db_identifier': simulation.db_identifier(),
+		'start_datetime': str(simulation.start_datetime),
+		'end_datetime': str(simulation.end_datetime),
 		'model': serialize_model(simulation.model)
 	}
 
@@ -56,22 +58,50 @@ def show_simulation_results(request, simulation_id):
 
 	return render(request, 'Sim_RT_Runner/simulation_results.html', {'simulation': serialize_simulation(simulation)})
 
-def get_simulation_results(request, db_identifier, start_virtual_time):
+@csrf_exempt
+def get_all_simulation_results(request):
+	
+	data = json.loads(request.body.decode('utf-8'))
+
 	client = MongoClient()
 	db = client.pmgbp
-	ms = eval('db.' + db_identifier)
+	ms = eval('db.' + data['db_identifier'])
 
 	col = ms.aggregate([
 		{'$match': {
 			'data.log': {'$eq': 'state'},
 			'data.state.model_class': {'$eq': 'space'},
-			'data.time': {'$gt': start_virtual_time}
-			}
-		}, {'$project': {
+			'data.time': {'$gt': data['start_virtual_time']}
+			}}, 
+		{'$unwind': {'path': '$data.state.metabolites', 'preserveNullAndEmptyArrays': False}}, 
+		{'$project': {
 			'_id': False,
-			'data': True
+			'time': '$data.time',
+			'compartment': '$data.model',
+			'metabolite': '$data.state.metabolites.id',
+			'amount': '$data.state.metabolites.amount'
+			}},
+		{'$group': {
+			'_id': {'metabolite': '$metabolite', 'time': '$time'},
+			'compartment': {'$first': '$compartment'},
+			'amount': {'$first': '$amount'}
+			}},
+		{'$sort': {'_id.time': 1}},
+		{'$group': {
+			'_id': '$_id.metabolite',
+			'compartment': {'$first': '$compartment'},
+			'time': {'$push': '$_id.time'},
+			'serie': {'$push': '$amount'}
+			}},
+		{'$project': {
+			'_id': False,
+			'metabolite': '$_id',
+			'compartment': True,
+			'data': {
+				'times': '$time',
+				'serie': '$serie'
 			}
-		}
+		}}
 	])
 
 	return JsonResponse([c for c in col], safe=False)

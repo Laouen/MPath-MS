@@ -1,0 +1,18 @@
+.simulation {
+	margin: 30px auto;
+	border: 1px solid #e0e0e0;
+	border-radius: 2px;
+	padding: 10px;
+}
+
+.simulation-title {
+	text-align: left;
+}
+
+.simulation-title > * {
+	font-size: 18px;
+}
+
+.simulation-title span {
+	font-weight: bolder;
+}
