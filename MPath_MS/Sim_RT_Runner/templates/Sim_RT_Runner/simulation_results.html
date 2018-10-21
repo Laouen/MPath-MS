@@ -17,9 +17,15 @@
         <div><span>Model name:</span> {{simulation.model.name}}</div>
         <div><span>Simulation id:</span> {{simulation.id}}</div>
         <div><span>Started time:</span> {{simulation.start_datetime}}</div>
+        
+        {% if simulation.running %}
         <a href="/Sim_RT_Runner/stop_simulation/{{simulation.id}}/" class="secondary-content red-text">
           <i class="material-icons">stop</i>
         </a>
+        {% else %}
+        <div><span>Finished time:</span> {{simulation.end_datetime}}</div>
+        {% endif %}
+
     </div>
     <div id="plot"></div>
   </div>
