@@ -10,9 +10,10 @@
 }
 
 .simulation-title > * {
-	font-size: 18px;
+	font-size: 1.0rem;
 }
 
 .simulation-title span {
-	font-weight: bolder;
+	font-weight: 500;
+	line-height: 110%;
 }

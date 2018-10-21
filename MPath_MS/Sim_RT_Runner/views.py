@@ -30,7 +30,8 @@ def serialize_simulation(simulation):
 def run_simulation(request, model_id):
 	model = PMGBPModel.objects.get(id=model_id)
 
-	simulation = Simulation(model=model, running=False)
+	# Simulation is set as started to be in the running simulation list immediately
+	simulation = Simulation(model=model, running=True)
 	simulation.save()
 
 	run_simulation_process.delay(simulation.id)
@@ -53,10 +54,23 @@ def stop_simulation(request, simulation_id):
 
 	return HttpResponseRedirect('/Sim_RT_Runner/simulation/results/' + str(simulation.id) + '/')
 
+
+def simulation_list(request):
+	running_simulations = Simulation.objects.filter(running=True)
+	finished_simulations = Simulation.objects.filter(running=False)
+
+	context_data = {
+		'running_simulations': [serialize_simulation(simulation) for simulation in running_simulations],
+		'finished_simulations': [serialize_simulation(simulation) for simulation in finished_simulations]
+	}
+
+	return render(request, 'Sim_RT_Runner/simulation_list.html', context_data)
+
 def show_simulation_results(request, simulation_id):
 	simulation = Simulation.objects.get(id=simulation_id)
+	serialized_simulation = serialize_simulation(simulation)
 
-	return render(request, 'Sim_RT_Runner/simulation_results.html', {'simulation': serialize_simulation(simulation)})
+	return render(request, 'Sim_RT_Runner/simulation_results.html', {'simulation': serialized_simulation})
 
 @csrf_exempt
 def get_all_simulation_results(request):
@@ -105,8 +119,3 @@ def get_all_simulation_results(request):
 	])
 
 	return JsonResponse([c for c in col], safe=False)
-
-def running_simulation_list(request):
-	running_simulations = Simulation.objects.filter(running=True)
-
-	return render(request, 'Sim_RT_Runner/simulation_list.html', {'simulations': [serialize_simulation(simulation) for simulation in running_simulations]})

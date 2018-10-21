@@ -1,5 +1,15 @@
 {% extends "web/base.html" %}
 
+{% block script %}
+  
+<script type="text/javascript">
+  $(document).ready(function(){
+    start_graphic("{{simulation.db_identifier}}", {{simulation.running|yesno:"true,false"}});
+  });
+</script>
+
+{% endblock %}
+
 {% block body %}
 <div>
   <div class="simulation standar-width">
