@@ -3,7 +3,7 @@ MODEL_NAME=$1
 echo "compiling model $MODEL_NAME"
 cd PMGBP
 make clean
-make all
+make all D='-D show_info -D MEMORE'
 
 echo "moving model to final destintation:"
 echo "MPath_MS/compiled_models/$MODEL_NAME"
