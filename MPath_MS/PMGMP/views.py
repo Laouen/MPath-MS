@@ -2,8 +2,11 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
 
 import subprocess
+import os
+import json
 
 from PMGBP.ModelGenerator import ModelGenerator
+from PMGBP.SBMLParser import SBMLParserEncoder
 
 from .forms import SBMLFileForm
 from .models import *
@@ -64,16 +67,31 @@ def remove_sbml_file(request, sbml_file_id):
 
 def generate_and_compile_model(request, sbml_file_id):
     sbml_file = SBMLfile.objects.get(id=sbml_file_id)
+    model_name = sbml_file.filename().replace('.xml', '')
+    sbml_json_file = 'parsed_sbml_datas/' + model_name + '.json'
+
+    try:
+        json_model = json.load(open(sbml_json_file, 'r'))
+    except Exception as e:
+        print(e)
+        json_model = None
 
     # Generate model
-    model_name = sbml_file.filename().replace('.xml', '')
     model_generator = ModelGenerator(sbml_file.file.path,
                                      'e',
                                      'p',
                                      'c',
                                      model_dir='./PMGBP',
-                                     json_model=None,
+                                     json_model=json_model,
                                      groups_size=150)
+
+    # Save the parsed data for later reuse
+    if not os.path.isfile(sbml_json_file):
+        try:
+            json.dump(model_generator.parser, open(sbml_json_file, 'w+'), cls=SBMLParserEncoder, indent=4)
+        except Exception as e:
+            print(e)
+
     model_generator.generate_top()
     model_generator.end_model()
 
