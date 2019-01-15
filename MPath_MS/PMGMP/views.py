@@ -60,6 +60,8 @@ def remove_sbml_file(request, sbml_file_id):
             'removed': False
         })
 
+    sbml_file.delete();
+
     return JsonResponse({
         'sbml_file_id': sbml_file_id,
         'removed': True
@@ -126,10 +128,16 @@ def model_files(request):
 
 def remove_model(request, model_id):
     pmgbp_model = PMGBPModel.objects.get(id=model_id)
+    sbml_json_file = 'parsed_sbml_datas/' + pmgbp_model.model_name() + '.json'
 
     try:
         os.remove(pmgbp_model.model.path)
         os.remove(pmgbp_model.parameters.path)
+        try:
+            os.remove(sbml_json_file)
+        except OSError as e:
+            print(e)
+
     except OSError as e:
         return JsonResponse({
             'model_id': model_id,
