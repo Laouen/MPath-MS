@@ -50,6 +50,9 @@ var graphic = {
     },
 
     fetch_data_success: function(data) {
+
+        console.log("[Graphic] Fetch data success", data);
+
         if (data.length > 0) {
             this.add_data(data);
         }
@@ -57,7 +60,7 @@ var graphic = {
 
     add_data: function(data) {
         this.mergeData(data);
-        
+
         var null_prefix_series = [];
         var prefix_times = [];
         if (this.series.length > 0) {
@@ -88,8 +91,6 @@ var graphic = {
                 this.series[i].data.serie = this.series[i].data.serie.concat(null_suffix_serie);
                 this.series[i].data.times = this.series[i].data.times.concat(suffix_times);
             }
-
-            this.chart.series[i].setData(this.series[i].data.serie, false);
         }
 
         // Add new series
@@ -103,21 +104,19 @@ var graphic = {
             }
 
             if (new_serie) {
+                data[j].to_plot = false;
+
                 if (null_prefix_series.length > 0) {
                     data[j].data.serie = null_prefix_series.concat(data[j].data.serie);
                     data[j].data.times = prefix_times.concat(data[j].data.times);
                 }
 
                 this.series.push(data[j]);
-                this.chart.addSeries({
-                    name: data[j].metabolite,
-                    data: data[j].data.serie
-                }, false);
             }
         }
 
-        this.chart.redraw();
-        this.update_categories();
+        // Update the chart
+        this.update_chart();
     },
 
     update_categories: function() {
@@ -147,5 +146,45 @@ var graphic = {
 
             index++;
         }
+    },
+
+    toggle_metabolite: function(metabolite) {
+        
+        // update the metabolite status
+        for (var i = 0; i < this.series.length; i++) {
+            if (this.series[i].metabolite === metabolite) {
+                this.series[i].to_plot = !this.series[i].to_plot;
+            }
+        }
+
+        this.update_chart();
+    },
+
+    update_chart: function() {
+
+        for (var i = 0; i < this.series.length; i++) {
+            found = false;
+            for (var j = 0; j < this.chart.series.length; j++) {
+                if (this.series[i].metabolite === this.chart.series[j].name) {
+                    
+                    if (this.series[i].to_plot) {
+                        this.chart.series[j].setData(this.series[i].data.serie, false);
+                    } else {
+                        this.chart.series[j].remove();
+                    }
+                    found = true;
+                }
+            }
+
+            if (!found && this.series[i].to_plot) {
+                this.chart.addSeries({
+                    name: this.series[i].metabolite,
+                    data: this.series[i].data.serie
+                }, false);
+            }
+        }
+
+        this.chart.redraw();
+        this.update_categories();
     }
 }

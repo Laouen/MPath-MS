@@ -6,7 +6,7 @@
   <ul class="collection with-header standar-width">
     <li class="collection-header"><h4>Currently running simulations</h4></li>
     {% for simulation in running_simulations %}
-      <li id="model-item-{{model.id}}" class="collection-item">
+      <li id="model-item-{{simulation.model.id}}" class="collection-item">
         <div>
           {{simulation.model.name}} - {{simulation.id}} : {{simulation.db_identifier}}
           <a href="/Sim_RT_Runner/simulation/results/{{simulation.id}}/" class="secondary-content">
@@ -23,7 +23,7 @@
   <ul class="collection with-header standar-width">
     <li class="collection-header"><h4>Finished simulations</h4></li>
     {% for simulation in finished_simulations %}
-      <li id="model-item-{{model.id}}" class="collection-item">
+      <li id="model-item-{{simulation.model.id}}" class="collection-item">
         <div>
           {{simulation.model.name}} - {{simulation.id}} : {{simulation.db_identifier}}
           <a href="/Sim_RT_Runner/simulation/results/{{simulation.id}}/" class="secondary-content">

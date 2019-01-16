@@ -3,8 +3,13 @@ nav {
 }
 
 .standar-width {
-	width: 80% !important;
+	width: 60% !important;
 	max-width: 600px !important;
+}
+
+.menu-width {
+	width: 35% !important;
+	max-width: 400px !important;
 }
 
 .upload_form {
@@ -31,4 +36,19 @@ h1 {
 	margin: auto !important;
 	
 	text-align: center;
+}
+
+@media screen and (max-width: 800px) {
+	.responsive {
+		display: block !important;
+	}
+
+	.standar-width {
+		width: 80% !important;
+	}
+
+	.menu-width {
+		width: 80% !important;
+		max-width: 600px !important;
+	}
 }

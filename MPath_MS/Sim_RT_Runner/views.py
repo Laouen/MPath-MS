@@ -14,6 +14,7 @@ import signal
 import json
 
 from pymongo import MongoClient
+from bs4 import BeautifulSoup # sudo pip install beautifulsoup4, lxml
 
 def serialize_simulation(simulation):
 	return {
@@ -54,7 +55,6 @@ def stop_simulation(request, simulation_id):
 
 	return HttpResponseRedirect('/Sim_RT_Runner/simulation/results/' + str(simulation.id) + '/')
 
-
 def simulation_list(request):
 	running_simulations = Simulation.objects.filter(running=True)
 	finished_simulations = Simulation.objects.filter(running=False)
@@ -70,7 +70,19 @@ def show_simulation_results(request, simulation_id):
 	simulation = Simulation.objects.get(id=simulation_id)
 	serialized_simulation = serialize_simulation(simulation)
 
-	return render(request, 'Sim_RT_Runner/simulation_results.html', {'simulation': serialized_simulation})
+	parameters = BeautifulSoup(open(simulation.model.parameters.path, 'r'), 'xml')
+
+	metabolites = []
+	for compartmen_metabolites in parameters.find_all("metabolites"):
+		metabolites.append({
+			'compartment_id': 'space_' + compartmen_metabolites.parent.name,
+			'metabolites': [m.attrs['id'] for m in compartmen_metabolites.find_all("metabolite")]
+		})
+
+	return render(request, 'Sim_RT_Runner/simulation_results.html', {
+		'simulation': serialized_simulation,
+		'metabolites': metabolites
+	})
 
 @csrf_exempt
 def get_all_simulation_results(request):
@@ -81,13 +93,14 @@ def get_all_simulation_results(request):
 	db = client.pmgbp
 	ms = eval('db.' + data['db_identifier'])
 
-	col = ms.aggregate([
+	pipeline = [
 		{'$match': {
 			'data.log': {'$eq': 'state'},
 			'data.state.model_class': {'$eq': 'space'},
 			'data.time': {'$gt': data['start_virtual_time']}
-			}}, 
-		{'$unwind': {'path': '$data.state.metabolites', 'preserveNullAndEmptyArrays': False}}, 
+			}
+		}, 
+		{'$unwind': {'path': '$data.state.metabolites', 'preserveNullAndEmptyArrays': False}},
 		{'$project': {
 			'_id': False,
 			'time': '$data.time',
@@ -99,23 +112,31 @@ def get_all_simulation_results(request):
 			'_id': {'metabolite': '$metabolite', 'time': '$time'},
 			'compartment': {'$first': '$compartment'},
 			'amount': {'$first': '$amount'}
-			}},
+			}
+		},
 		{'$sort': {'_id.time': 1}},
 		{'$group': {
 			'_id': '$_id.metabolite',
 			'compartment': {'$first': '$compartment'},
 			'time': {'$push': '$_id.time'},
 			'serie': {'$push': '$amount'}
-			}},
+			}
+		},
 		{'$project': {
 			'_id': False,
 			'metabolite': '$_id',
 			'compartment': True,
-			'data': {
-				'times': '$time',
-				'serie': '$serie'
+			'data': {'times': '$time', 'serie': '$serie'}
 			}
-		}}
-	])
+		}
+	]
+
+	col = ms.aggregate(pipeline=pipeline, allowDiskUse=True)
+
+	'''
+	{'$match': {
+			'data.state.metabolites.id': {'$in': ['M_duri_c','M_uLa4n_c','M_dcdp_c','M_actACP_c','M_r5p_c','M_3fe4s_c','M_23dhacoa_c']}
+			}},
+	'''
 
 	return JsonResponse([c for c in col], safe=False)

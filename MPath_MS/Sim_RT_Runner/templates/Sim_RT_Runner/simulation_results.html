@@ -3,16 +3,17 @@
 {% block script %}
   
 <script type="text/javascript">
-  $(document).ready(function(){
+  $(document).ready(function() {
     start_graphic("{{simulation.db_identifier}}", {{simulation.running|yesno:"true,false"}});
+    $('.collapsible').collapsible();
   });
 </script>
 
 {% endblock %}
 
 {% block body %}
-<div>
-  <div class="simulation standar-width">
+<div class="simulation-main">
+  <div class="simulation standar-width by-side responsive">
     <div class="simulation-title">
         <div><span>Model name:</span> {{simulation.model.name}}</div>
         <div><span>Simulation id:</span> {{simulation.id}}</div>
@@ -28,6 +29,27 @@
 
     </div>
     <div id="plot"></div>
+  </div>
+
+  <div class="metabolites menu-width by-side responsive">
+    <div class="metabolites-title">Metabolites to show</div>
+    <ul id="metabolite_list" class="collapsible">
+      {% for compartment in metabolites %}
+      <li id='compartment-{{compartment.compartment_id}}-metabolites'>
+        <div class='collapsible-header'><span>compartment: </span>{{compartment.compartment_id}}</div>
+        <div class='collapsible-body'>
+          {% for metabolite in compartment.metabolites %}
+          <p>
+            <label>
+              <input type='checkbox' onclick='graphic.toggle_metabolite("{{metabolite}}")' />
+              <span>{{metabolite}}</span>
+            </label>
+          </p>
+          {% endfor %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
   </div>
 </div>
 {% endblock %}

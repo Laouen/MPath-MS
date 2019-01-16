@@ -11,6 +11,11 @@ h1 {
 	font-size: 2.5rem;
 }
 
+.by-side {
+    display: inline-block;
+    vertical-align: top;
+}
+
 @media screen and (max-width: 990px) {
 	h1 {
 		font-size: 2.0rem;

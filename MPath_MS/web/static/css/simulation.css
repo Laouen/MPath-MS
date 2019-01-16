@@ -1,8 +1,16 @@
+.simulation-main {
+	text-align: center;
+}
+
 .simulation {
+	position: sticky;
+    top: 70px;
+
 	margin: 30px auto;
+	padding: 10px;
+	
 	border: 1px solid #e0e0e0;
 	border-radius: 2px;
-	padding: 10px;
 }
 
 .simulation-title {
@@ -16,4 +24,12 @@
 .simulation-title span {
 	font-weight: 500;
 	line-height: 110%;
+}
+
+.metabolites {
+	margin: 30px auto; 
+	border: 1px solid #e0e0e0;
+	border-radius: 2px;
+	padding: 10px;	
+	text-align: left;
 }
