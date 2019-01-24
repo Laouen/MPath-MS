@@ -19,14 +19,20 @@ def serialize_SBMLfile(sbml_file):
         'model_generated': sbml_file.model_ready()
     } 
 
+def serialize_parameter(parameter):
+    return {
+        'id': parameter.id,
+        'name': parameter.name()
+    }
+
 def serialize_model(model):
     return {
         'id': model.id,
-        'name': model.name()
+        'name': model.name(),
+        'parameters': [serialize_parameter(p) for p in model.parameters.all()]
     }
 
 # Create your views here.
-
 def upload_sbml_form(request):
     if request.method == 'GET':
         return render(request, 'PMGMP/upload_sbml.html')
@@ -40,6 +46,34 @@ def upload_sbml_form(request):
         else:
             # TODO: Redirect to upload error
             print('invalid form')
+
+def upload_model_parameter(request):
+    model_id = request.POST.get('model_id')
+    model = PMGBPModel.objects.get(id=model_id)
+
+    parameter = Parameter(file=request.FILES['parameter_file'])
+    parameter.save()
+
+    model.parameters.add(parameter)
+    model.save()
+
+    return HttpResponseRedirect('/PMGMP/model_files/')
+
+def remove_model_parameter(request, model_id, parameter_id):
+    parameter = Parameter.objects.get(id=parameter_id)
+    model = PMGBPModel.objects.get(id=model_id)
+    
+    try:
+        os.remove(parameter.file.path)
+        
+        model.parameters.remove(parameter)
+        model.save()
+        
+        parameter.delete()
+    except OSError as e:
+        print(e)
+
+    return HttpResponseRedirect('/PMGMP/model_files/')
 
 def sbml_files(request):
     sbml_files = [serialize_SBMLfile(f) for f in SBMLfile.objects.all()]
@@ -105,11 +139,15 @@ def generate_and_compile_model(request, sbml_file_id):
     if completed_process.returncode == 0:
         pmgbp_model = PMGBPModel()
         pmgbp_model.model.name = 'compiled_models/' + model_name
-        pmgbp_model.parameters.name = 'model_parameters/' + model_name + '.xml'
         pmgbp_model.save()
 
         sbml_file.model = pmgbp_model
         sbml_file.save()
+
+        model_parameter = Parameter()
+        model_parameter.file.name = 'model_parameters/' + model_name + '.xml'
+        model_parameter.save() 
+        pmgbp_model.parameters.add(model_parameter)
 
         return JsonResponse({
             'sbml_file_id': sbml_file_id,

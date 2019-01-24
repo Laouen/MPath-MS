@@ -1,0 +1,26 @@
+.model-name {
+	width: calc(80% - 4px);
+    height: 45px;
+    padding: 10px;
+}
+
+.model-options {
+	padding: 10px;
+
+    width: 20%;
+    height: 45px;
+
+    text-align: right;
+    vertical-align: bottom;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.parameter-item-name {
+	width: 80%;
+}
+
+.parameter-item-btns {
+	width: 20%
+	text-align: right;
+}

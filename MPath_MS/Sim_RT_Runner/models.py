@@ -8,6 +8,7 @@ class Simulation(models.Model):
     end_datetime = models.DateTimeField(null=True, blank=True)
     pid = models.IntegerField(null=True, blank=True)
     model = models.ForeignKey(PMGBPModel, on_delete=models.CASCADE)
+    parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE)
 
     def __str__(self):
         if self.end_datetime is not None:

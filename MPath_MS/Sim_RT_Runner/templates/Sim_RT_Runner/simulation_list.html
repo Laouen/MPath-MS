@@ -8,8 +8,8 @@
     {% for simulation in running_simulations %}
       <li id="model-item-{{simulation.model.id}}" class="collection-item">
         <div>
-          {{simulation.model.name}} - {{simulation.id}} : {{simulation.db_identifier}}
-          <a href="/Sim_RT_Runner/simulation/results/{{simulation.id}}/" class="secondary-content">
+          {{simulation.model.name}} - {{simulation.parameter.name}} : {{simulation.id}} 
+          <a href="/Sim_RT_Runner/simulation/results/{{simulation.id}}/{{simulation.parameter.id}}/ class="secondary-content">
             <i class="material-icons">insert_chart</i>
           </a>
           <a href="/Sim_RT_Runner/stop_simulation/{{simulation.id}}" class="secondary-content red-text">
@@ -25,8 +25,8 @@
     {% for simulation in finished_simulations %}
       <li id="model-item-{{simulation.model.id}}" class="collection-item">
         <div>
-          {{simulation.model.name}} - {{simulation.id}} : {{simulation.db_identifier}}
-          <a href="/Sim_RT_Runner/simulation/results/{{simulation.id}}/" class="secondary-content">
+          {{simulation.model.name}} - {{simulation.parameter.name}} : {{simulation.id}}
+          <a href="/Sim_RT_Runner/simulation/results/{{simulation.id}}/{{simulation.parameter.id}}/" class="secondary-content">
             <i class="material-icons">insert_chart</i>
           </a>
         </div>

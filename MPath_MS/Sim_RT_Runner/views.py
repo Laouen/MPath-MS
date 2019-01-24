@@ -7,7 +7,7 @@ from django.shortcuts import render
 from .tasks import *
 from .models import *
 from PMGMP.models import *
-from PMGMP.views import serialize_model
+from PMGMP.views import serialize_model, serialize_parameter
 
 import os
 import signal
@@ -24,20 +24,21 @@ def serialize_simulation(simulation):
 		'db_identifier': simulation.db_identifier(),
 		'start_datetime': str(simulation.start_datetime),
 		'end_datetime': str(simulation.end_datetime),
-		'model': serialize_model(simulation.model)
+		'model': serialize_model(simulation.model),
+		'parameter': serialize_parameter(simulation.parameter)
 	}
 
-# Create your views here.
-def run_simulation(request, model_id):
+def run_simulation(request, model_id, parameter_id):
 	model = PMGBPModel.objects.get(id=model_id)
+	parameter = Parameter.objects.get(id=parameter_id)
 
 	# Simulation is set as started to be in the running simulation list immediately
-	simulation = Simulation(model=model, running=True)
+	simulation = Simulation(model=model, parameter=parameter, running=True)
 	simulation.save()
 
-	run_simulation_process.delay(simulation.id)
+	run_simulation_process.delay(simulation.id, parameter.id)
 
-	return HttpResponseRedirect('/Sim_RT_Runner/simulation/results/' + str(simulation.id) + '/')
+	return HttpResponseRedirect('/Sim_RT_Runner/simulation/results/' + str(simulation.id) + '/' + str(parameter.id) + '/')
 
 def stop_simulation(request, simulation_id):
 	simulation = Simulation.objects.get(id=simulation_id)
@@ -53,7 +54,7 @@ def stop_simulation(request, simulation_id):
 	simulation.running = False
 	simulation.save()
 
-	return HttpResponseRedirect('/Sim_RT_Runner/simulation/results/' + str(simulation.id) + '/')
+	return HttpResponseRedirect('/Sim_RT_Runner/simulation/results/' + str(simulation.id) + '/' + str(simulation.parameter.id) + '/')
 
 def simulation_list(request):
 	running_simulations = Simulation.objects.filter(running=True)
@@ -66,11 +67,12 @@ def simulation_list(request):
 
 	return render(request, 'Sim_RT_Runner/simulation_list.html', context_data)
 
-def show_simulation_results(request, simulation_id):
+def show_simulation_results(request, simulation_id, parameter_id):
 	simulation = Simulation.objects.get(id=simulation_id)
 	serialized_simulation = serialize_simulation(simulation)
 
-	parameters = BeautifulSoup(open(simulation.model.parameters.path, 'r'), 'xml')
+	parameter = Parameter.objects.get(id=parameter_id);
+	parameters = BeautifulSoup(open(parameter.file.path, 'r'), 'xml')
 
 	metabolites = []
 	for compartmen_metabolites in parameters.find_all("metabolites"):

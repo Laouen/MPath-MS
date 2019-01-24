@@ -3,9 +3,18 @@ from django.db import models
 
 # Create your models here.
 
+class Parameter(models.Model):
+    file = models.FileField(upload_to='model_parameters/')
+
+    def __str__(self):
+        return str(self.id) + " - " + self.name()
+
+    def name(self):
+        return os.path.basename(self.file.path)
+
 class PMGBPModel(models.Model):
     model = models.FileField(upload_to='compiled_models/')
-    parameters = models.FileField(upload_to='model_parameters/')
+    parameters = models.ManyToManyField(Parameter)
 
     def __str__(self):
         return str(self.id) + " - " + self.name()
