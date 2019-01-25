@@ -170,8 +170,12 @@ def remove_model(request, model_id):
 
     try:
         os.remove(pmgbp_model.model.path)
-        os.remove(pmgbp_model.parameters.path)
+
         try:
+            for parameter in pmgbp_model.parameters.all():
+                os.remove(parameter.file.path)
+                parameter.delete()
+
             os.remove(sbml_json_file)
         except OSError as e:
             print(e)
