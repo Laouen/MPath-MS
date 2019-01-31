@@ -36,11 +36,14 @@
               <div class="parameter-item">
                 <div class="parameter-item-name by-side">{{parameter.name}}</div>
                 <div class="parameter-item-btns by-side">
-                  <a href="/Sim_RT_Runner/run_simulation/{{model.id}}/{{parameter.id}}/" class="secondary-content")'>
-                    <i class="material-icons">insert_chart</i>
-                  </a>
                   <a href="/PMGMP/remove_model_parameter/{{model.id}}/{{parameter.id}}/" class="secondary-content red-text">
                     <i class="material-icons">delete_forever</i>
+                  </a>
+                  <a href="/media/model_parameters/{{parameter.name}}" class="secondary-content" download>
+                    <i class="material-icons">cloud_download</i>
+                  </a>
+                  <a href="/Sim_RT_Runner/run_simulation/{{model.id}}/{{parameter.id}}/" class="secondary-content")'>
+                    <i class="material-icons">insert_chart</i>
                   </a>
                 </div>
               </div>

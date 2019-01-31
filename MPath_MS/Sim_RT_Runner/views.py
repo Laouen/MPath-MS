@@ -13,6 +13,8 @@ import os
 import signal
 import json
 
+
+import pandas as pd
 from pymongo import MongoClient
 from bs4 import BeautifulSoup # sudo pip install beautifulsoup4, lxml
 
@@ -134,11 +136,9 @@ def get_all_simulation_results(request):
 	]
 
 	col = ms.aggregate(pipeline=pipeline, allowDiskUse=True)
+	result = [c for c in col]
 
-	'''
-	{'$match': {
-			'data.state.metabolites.id': {'$in': ['M_duri_c','M_uLa4n_c','M_dcdp_c','M_actACP_c','M_r5p_c','M_3fe4s_c','M_23dhacoa_c']}
-			}},
-	'''
+	#df = pd.DataFrame(result)
+	#df.to_csv('data.csv', index=False, encoding='utf-8')
 
-	return JsonResponse([c for c in col], safe=False)
+	return JsonResponse(result, safe=False)

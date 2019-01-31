@@ -31,25 +31,32 @@
     <div id="plot"></div>
   </div>
 
-  <div class="metabolites menu-width by-side responsive">
-    <div class="metabolites-title">Metabolites to show</div>
-    <ul id="metabolite_list" class="collapsible">
-      {% for compartment in metabolites %}
-      <li id='compartment-{{compartment.compartment_id}}-metabolites'>
-        <div class='collapsible-header'><span>compartment: </span>{{compartment.compartment_id}}</div>
-        <div class='collapsible-body'>
-          {% for metabolite in compartment.metabolites %}
-          <p>
-            <label>
-              <input type='checkbox' onclick='graphic.toggle_metabolite("{{metabolite}}")' />
-              <span>{{metabolite}}</span>
-            </label>
-          </p>
-          {% endfor %}
-        </div>
-      </li>
-      {% endfor %}
-    </ul>
+  <div class="sidebar-menu menu-width by-side responsive">
+    <div class="metabolites-menu">
+      <div class="metabolites-title">Metabolites to show</div>
+      <ul id="metabolite_list" class="collapsible">
+        {% for compartment in metabolites %}
+        <li id='compartment-{{compartment.compartment_id}}-metabolites'>
+          <div class='collapsible-header'><span>compartment: </span>{{compartment.compartment_id}}</div>
+          <div class='collapsible-body'>
+            {% for metabolite in compartment.metabolites %}
+            <p>
+              <label>
+                <input type='checkbox' onclick='graphic.toggle_metabolite("{{metabolite}}")' />
+                <span>{{metabolite}}</span>
+              </label>
+            </p>
+            {% endfor %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <a class="waves-effect waves-light btn" onclick="exportDataAsCSV(graphic.series)">
+      <i class="material-icons left">cloud_download</i>
+      Export data as CSV
+    </a>
   </div>
 </div>
 {% endblock %}
