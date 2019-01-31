@@ -15,65 +15,63 @@
 
   <ul class="collection with-header standar-width">
     <li class="collection-header"><h4>Model files</h4></li>
-    {% for model in model_files %}
-      <li id="model-item-{{model.id}}" class="collection-item">
-        <ul id="parameter_list" class="collapsible">
-          {% for model in model_files %}
-          <li id='parameter-item-{{parameter.id}}'>
-            <div class='collapsible-header by-side model-name'>
-              {{model.name}}
-            </div>
-            <div class="by-side model-options">
-              <a href="#" class="secondary-content red-text" onclick='javascript:remove_model("{{model.id}}")'>
-                <i class="material-icons">delete_forever</i>
-              </a>
-              <a href="/media/compiled_models/{{model.name}}" class="secondary-content" download>
-                <i class="material-icons">cloud_download</i>
-              </a>
-            </div>
-            <div class='collapsible-body'>
-              {% for parameter in model.parameters %}
-              <div class="parameter-item">
-                <div class="parameter-item-name by-side">{{parameter.name}}</div>
-                <div class="parameter-item-btns by-side">
-                  <a href="/PMGMP/remove_model_parameter/{{model.id}}/{{parameter.id}}/" class="secondary-content red-text">
-                    <i class="material-icons">delete_forever</i>
-                  </a>
-                  <a href="/media/model_parameters/{{parameter.name}}" class="secondary-content" download>
-                    <i class="material-icons">cloud_download</i>
-                  </a>
-                  <a href="/Sim_RT_Runner/run_simulation/{{model.id}}/{{parameter.id}}/" class="secondary-content")'>
-                    <i class="material-icons">insert_chart</i>
-                  </a>
-                </div>
+    <li id="models" class="collection-item">
+      <ul id="parameter_list" class="collapsible">
+        {% for model in model_files %}
+        <li id='model-item-{{model.id}}'>
+          <div class='collapsible-header by-side model-name'>
+            {{model.name}}
+          </div>
+          <div class="by-side model-options">
+            <a href="#" class="secondary-content red-text" onclick='javascript:remove_model("{{model.id}}")'>
+              <i class="material-icons">delete_forever</i>
+            </a>
+            <a href="/media/compiled_models/{{model.name}}" class="secondary-content" download>
+              <i class="material-icons">cloud_download</i>
+            </a>
+          </div>
+          <div class='collapsible-body'>
+            {% for parameter in model.parameters %}
+            <div id="parameter-item-{{parameter.id}}" class="parameter-item">
+              <div class="parameter-item-name by-side">{{parameter.name}}</div>
+              <div class="parameter-item-btns by-side">
+                <a href="/PMGMP/remove_model_parameter/{{model.id}}/{{parameter.id}}/" class="secondary-content red-text">
+                  <i class="material-icons">delete_forever</i>
+                </a>
+                <a href="/media/model_parameters/{{parameter.name}}" class="secondary-content" download>
+                  <i class="material-icons">cloud_download</i>
+                </a>
+                <a href="/Sim_RT_Runner/run_simulation/{{model.id}}/{{parameter.id}}/" class="secondary-content")'>
+                  <i class="material-icons">insert_chart</i>
+                </a>
               </div>
-              {% endfor %}
-              <div class="parameter-item">
-                <form enctype="multipart/form-data" method="post" action="/PMGMP/upload_model_parameter/">
-                  <div class="file-field input-field">
-                    <div class="btn">
-                      <span>File</span>
-                      <input type="file" name="parameter_file">
-                    </div>
-                    <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text">
-                    </div>
+            </div>
+            {% endfor %}
+            <div class="parameter-item">
+              <form enctype="multipart/form-data" method="post" action="/PMGMP/upload_model_parameter/">
+                <div class="file-field input-field">
+                  <div class="btn">
+                    <span>File</span>
+                    <input type="file" name="parameter_file">
                   </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                  </div>
+                </div>
 
-                  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                  <input type="hidden" name="model_id" value="{{ model.id }}">
-    
-                  <button class="btn waves-effect waves-light" type="submit" name="action">Upload
-                    <i class="material-icons right">send</i>
-                  </button>
-                </form>
-              </div>
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <input type="hidden" name="model_id" value="{{ model.id }}">
+  
+                <button class="btn waves-effect waves-light" type="submit" name="action">Upload
+                  <i class="material-icons right">send</i>
+                </button>
+              </form>
             </div>
-          </li>
-          {% endfor %}
-        </ul>
-      </li>
-    {% endfor %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
   </ul>
   
 </div>
