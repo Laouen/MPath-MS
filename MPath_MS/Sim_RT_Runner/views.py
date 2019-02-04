@@ -139,6 +139,6 @@ def get_all_simulation_results(request):
 	result = [c for c in col]
 
 	#df = pd.DataFrame(result)
-	#df.to_csv('data.csv', index=False, encoding='utf-8')
+	#df.to_csv('data_' + data['db_identifier'] + '.csv', index=False, encoding='utf-8')
 
 	return JsonResponse(result, safe=False)
