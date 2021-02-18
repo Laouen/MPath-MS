@@ -13,6 +13,7 @@ MPath_MS/db.sqlite3
 **__pycache__/
 
 # model run symlinks created in setup script
+MPath_MS/MPath_MS/media
 MPath_MS/compiled_models
 MPath_MS/model_parameters
 MPath_MS/sbml_files
