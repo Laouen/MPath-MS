@@ -2,7 +2,6 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
 
 import subprocess
-import os
 import json
 
 from PMGBP.ModelGenerator import ModelGenerator

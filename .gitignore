@@ -4,4 +4,16 @@ MPath_MS/compiled_models/
 MPath_MS/model_parameters/
 MPath_MS/parsed_sbml_datas/
 MPath_MS/web/migrations/
-*.pyc
+MPath_MS/db.sqlite3
+
+# ignore IDE
+.idea
+
+# python caches
+**__pycache__/
+
+# model run symlinks created in setup script
+MPath_MS/compiled_models
+MPath_MS/model_parameters
+MPath_MS/sbml_files
+MPath_MS/parsed_sbml_datas

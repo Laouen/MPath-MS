@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from django.shortcuts import render
 from .tasks import *
 from .models import *
 from PMGMP.models import *
@@ -13,8 +12,6 @@ import os
 import signal
 import json
 
-
-import pandas as pd
 from pymongo import MongoClient
 from bs4 import BeautifulSoup # sudo pip install beautifulsoup4, lxml
 
